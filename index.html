@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estatística Fácil</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(#1a1a2e, #16213e);
+            color: #e0e0e0;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-size: 18px;
+        }
+        .container {
+            background-color: #1e1e2f;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 6px 30px rgba(0, 0, 0, 0.7);
+            max-width: 900px;
+            width: 90%;
+            text-align: center;
+        }
+        h1 {
+            font-size: 32px;
+            color: #4CAF50;
+            margin-bottom: 25px;
+            font-weight: bold;
+        }
+        .tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 25px;
+            gap: 10px;
+        }
+        .tab-button {
+            font-size: 20px;
+            padding: 15px 30px;
+            margin: 0 5px;
+            cursor: pointer;
+            background-color: #2a2a3d;
+            color: #e0e0e0;
+            border: none;
+            border-radius: 10px;
+            transition: background-color 0.3s;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        }
+        .tab-button.active, .tab-button:hover {
+            background-color: #4CAF50;
+            color: white;
+            box-shadow: 0 4px 10px rgba(76, 175, 80, 0.5);
+        }
+        .tab {
+            display: none;
+        }
+        .tab.active {
+            display: block;
+        }
+        label {
+            font-size: 20px;
+            display: block;
+            margin: 15px 0 10px;
+            color: #d0d0d0;
+        }
+        input {
+            font-size: 18px;
+            padding: 12px;
+            width: 100%;
+            max-width: 550px;
+            border: 2px solid #555;
+            border-radius: 8px;
+            background-color: #2a2a3d;
+            color: #e0e0e0;
+            text-align: center;
+            transition: border-color 0.3s;
+        }
+        input::placeholder {
+            color: #aaa;
+            font-style: italic;
+        }
+        .checkbox-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin: 25px 0;
+            text-align: left;
+        }
+        .checkbox-container label {
+            font-size: 18px;
+            color: #e0e0e0;
+            line-height: 1.5;
+        }
+        button {
+            font-size: 20px;
+            padding: 15px 30px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.1s;
+            margin: 10px;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.4);
+        }
+        button:hover {
+            background-color: #45a049;
+            transform: translateY(-2px);
+        }
+        .resultado {
+            font-size: 20px;
+            white-space: pre-wrap;
+            background-color: #2a2a3d;
+            padding: 20px;
+            border: 2px solid #555;
+            border-radius: 10px;
+            min-height: 180px;
+            margin-top: 25px;
+            color: #e0e0e0;
+            line-height: 1.6;
+            text-align: left;
+        }
+        .instrucao {
+            font-size: 18px;
+            color: #c0c0c0;
+            margin-bottom: 20px;
+            text-align: left;
+            padding: 10px;
+            background-color: #25253a;
+            border-radius: 8px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 15px;
+        }
+        table th, table td {
+            padding: 12px;
+            border: 2px solid #555;
+            text-align: center;
+            font-size: 18px;
+        }
+        table th {
+            background-color: #2a2a3d;
+            font-weight: bold;
+        }
+        table input {
+            width: 100%;
+            box-sizing: border-box;
+            background-color: #1e1e2f;
+            color: #e0e0e0;
+            border: none;
+            font-size: 18px;
+            padding: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Estatística Fácil</h1>
+        <div class="tabs">
+            <button class="tab-button active" onclick="showTab('discreto')">Agrupamento Discreto</button>
+            <button class="tab-button" onclick="showTab('classes')">Agrupamento em Classes</button>
+        </div>
+
+        <div id="discreto" class="tab active">
+            <div class="instrucao">
+                Insira seus dados aqui! Digite um valor na coluna "Amostra" (ex.: 5), e a frequência "Fi" será calculada automaticamente com base nas ocorrências. Fac e Posição serão atualizadas sozinhas. Exemplo: Para 1, 1, 1, 2, 2, 3, 4, use "Inserção de Dados Rápidos" com "1, 1, 1, 2, 2, 3, 4" para criar linhas automáticas. Adicione mais linhas com "Adicionar Linha" e calcule os resultados com "Calcular". Você pode ajustar manualmente os valores de Fi se necessário.
+            </div>
+            <label>Unidade de Medida:</label>
+            <input type="text" id="unidade-discreto" placeholder="Ex: kg, cm, °C (opcional)">
+            <label>Inserção de Dados Rápidos (valores separados por vírgula ou espaço):</label>
+            <input type="text" id="quick-input-discreto" placeholder="Ex: 1, 1, 1, 2, 2, 3, 4">
+            <button onclick="quickInsertDiscreto()">Inserir Dados Rápidos</button>
+            <table id="table-discreto">
+                <thead>
+                    <tr>
+                        <th>Amostra</th>
+                        <th>Fi (frequência)</th>
+                        <th>Fac (frequência acumulada)</th>
+                        <th>Posição</th>
+                        <th>Ação</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><input type="number" class="value-discreto" oninput="autoCalculateFi()"></td>
+                        <td><input type="number" class="fi-discreto" oninput="updateFacPos('discreto')"></td>
+                        <td><span class="fac-pos"></span></td>
+                        <td><span class="fac-pos"></span></td>
+                        <td><button onclick="removeRow(this, 'discreto')">Remover</button></td>
+                    </tr>
+                </tbody>
+            </table>
+            <button onclick="addRowDiscreto()">Adicionar Linha</button>
+            <button onclick="clearTable('discreto')">Limpar Tabela</button>
+            <div class="checkbox-container">
+                <label><input type="checkbox" id="media-discreto" checked> Média (valor médio)</label>
+                <label><input type="checkbox" id="mediana-discreto" checked> Mediana (valor central)</label>
+                <label><input type="checkbox" id="moda-discreto" checked> Moda (valor mais frequente)</label>
+                <label><input type="checkbox" id="variancia-discreto" checked> Variância (dispersão dos dados)</label>
+                <label><input type="checkbox" id="desvio-discreto" checked> Desvio Padrão (variação típica)</label>
+                <label><input type="checkbox" id="cv-discreto" checked> Coef. de Variação (% de variação)</label>
+            </div>
+            <button onclick="calcularDiscreto()">Calcular</button>
+            <div id="resultado-discreto" class="resultado"></div>
+        </div>
+
+        <div id="classes" class="tab">
+            <div class="instrucao">
+                Organize seus dados em intervalos! Na primeira linha, digite o "Lim Inf" (ex.: 0) e "Lim Sup" (ex.: 10) para definir o primeiro intervalo. As próximas linhas serão preenchidas automaticamente com o mesmo tamanho de intervalo (ex.: 10-20, 20-30). Adicione "Fi" manualmente (ex.: 4 para o intervalo 0-10). Use "Inserção de Dados Rápidos" com intervalos como "0:10, 10:20, 20:30" ou valores simples como "0, 10, 20, 30" para criar intervalos de uma vez. Calcule os resultados com "Calcular".
+            </div>
+            <label>Unidade de Medida:</label>
+            <input type="text" id="unidade-classes" placeholder="Ex: kg, cm, °C (opcional)">
+            <label>Inserção de Dados Rápidos (intervalos ou valores separados por vírgula):</label>
+            <input type="text" id="quick-input-classes" placeholder="Ex: 0:10, 10:20, 20:30 ou 0, 10, 20, 30">
+            <button onclick="quickInsertClasses()">Inserir Dados Rápidos</button>
+            <table id="table-classes">
+                <thead>
+                    <tr>
+                        <th>Lim Inf</th>
+                        <th>Lim Sup</th>
+                        <th>Fi (frequência)</th>
+                        <th>Fac (frequência acumulada)</th>
+                        <th>Pmi (ponto médio)</th>
+                        <th>Ação</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><input type="number" class="liminf-classes" oninput="autoFillClasses()"></td>
+                        <td><input type="number" class="limsup-classes" oninput="autoFillClasses()"></td>
+                        <td><input type="number" class="fi-classes" oninput="updateFacPos('classes')"></td>
+                        <td><span class="fac-pos"></span></td>
+                        <td><span class="fac-pos"></span></td>
+                        <td><button onclick="removeRow(this, 'classes')">Remover</button></td>
+                    </tr>
+                </tbody>
+            </table>
+            <button onclick="addRowClasses()">Adicionar Linha</button>
+            <button onclick="clearTable('classes')">Limpar Tabela</button>
+            <div class="checkbox-container">
+                <label><input type="checkbox" id="media-classes" checked> Média (valor médio)</label>
+                <label><input type="checkbox" id="variancia-classes" checked> Variância (dispersão dos dados)</label>
+                <label><input type="checkbox" id="desvio-classes" checked> Desvio Padrão (variação típica)</label>
+                <label><input type="checkbox" id="cv-classes" checked> Coef. de Variação (% de variação)</label>
+                <label><input type="checkbox" id="moda-bruta" checked> Moda Bruta (intervalo mais frequente)</label>
+                <label><input type="checkbox" id="moda-czuber" checked> Moda de Czuber (estimativa da moda)</label>
+            </div>
+            <button onclick="calcularClasses()">Calcular</button>
+            <div id="resultado-classes" class="resultado"></div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
